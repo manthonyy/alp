@@ -12,6 +12,8 @@ public class Menu {
 
     User currentUser;
 
+    TransactionManager transactionManager = new TransactionManager();
+
     User admin =
             new User(
                     "ADM001",
@@ -158,6 +160,7 @@ public class Menu {
             System.out.println("3. Transaction History");
             System.out.println("4. Redeem Voucher");
             System.out.println("5. Logout");
+            System.out.print("Choose Menu: ");
 
             int menu = x.nextInt();
             x.nextLine();
@@ -193,6 +196,7 @@ public class Menu {
         System.out.println("3. Glass Waste");
         System.out.println("4. Organic Waste");
         System.out.println("5. E-Waste");
+        System.out.print("Choose Waste Type: ");
 
         System.out.print("Choose Waste : ");
 
@@ -229,6 +233,7 @@ public class Menu {
         int points =waste.calculatePoints();
         currentUser.addPoints(points);
         Transaction t =new Transaction("TRX" +(currentUser.transactionHistory.size() + 1),currentUser,waste,weight,points);
+            transactionManager.addTransaction(t);
             currentUser.transactionHistory.add(t);
             System.out.println("Waste Successfully Deposited!");
             System.out.println("Points Earned : "+ points);
@@ -244,7 +249,10 @@ public class Menu {
         System.out.println("2. Process Waste");
         System.out.println("3. Generate Report");
         System.out.println("4. Upgrade Facility");
-        System.out.println("5. Logout");
+        System.out.println("5. View All Transactions");
+        System.out.println("6. Total Waste");
+        System.out.println("7. Logout");
+        System.out.print("Choose Menu: ");
 
         int menu = x.nextInt();
         x.nextLine();
@@ -268,6 +276,14 @@ public class Menu {
                 break;
 
             case 5:
+                transactionManager.showAllTransactions();
+                break;
+
+            case 6:
+                transactionManager.systemMonitoring();
+                break;
+
+            case 7:
                 return;
 
             default:
