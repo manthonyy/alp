@@ -207,6 +207,11 @@ public class Menu {
         double weight = x.nextDouble();
         x.nextLine();
 
+        if(weight <= 0){
+            System.out.println("Weight must be more than 0!");
+            return;
+        }
+
         WasteItem waste = null;
 
         switch(choice){
