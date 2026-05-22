@@ -1,0 +1,48 @@
+import java.util.ArrayList;
+
+public class TransactionManager {
+    ArrayList<Transaction> transactionList=new ArrayList<>();
+
+    public void addTransaction(Transaction transaction){
+        transactionList.add(transaction);
+        System.out.println("Transaction berhasil ditambahkan!");
+    }
+
+    public void showAllTransactions(){
+        if(transactionList.isEmpty()){
+            System.out.println("Belum ada transaksi.");
+            return;
+        }
+        System.out.println("===== LIST TRANSAKSI =====");
+        for(Transaction transaction: transactionList){
+            transaction.displayTransaction();
+        }
+    }
+
+    public double calculateTotalWaste(){
+        double totalWaste= 0;
+        for(Transaction transaction: transactionList){
+            totalWaste += transaction.weight;
+        }
+        return totalWaste;
+    }
+
+    public void showTotalWaste(){
+        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " KG");
+    }
+
+    public int calculateTotalPoints(){
+        int totalPoints = 0;
+        for(Transaction transaction : transactionList){
+            totalPoints += transaction.pointsEarned;
+        }
+        return totalPoints;
+    }
+
+    public void systemMonitoring(){
+        System.out.println("===== SYSTEM MONITORING =====");
+        System.out.println("Jumlah Transaksi : "+ transactionList.size());
+        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " KG");
+        System.out.println("Total Points : "+ calculateTotalPoints());
+    }
+}
