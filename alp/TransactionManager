@@ -28,7 +28,7 @@ public class TransactionManager {
     }
 
     public void showTotalWaste(){
-        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " KG");
+        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " Kg");
     }
 
     public int calculateTotalPoints(){
@@ -42,7 +42,7 @@ public class TransactionManager {
     public void systemMonitoring(){
         System.out.println("===== SYSTEM MONITORING =====");
         System.out.println("Jumlah Transaksi : "+ transactionList.size());
-        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " KG");
+        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " Kg");
         System.out.println("Total Points : "+ calculateTotalPoints());
     }
 }
