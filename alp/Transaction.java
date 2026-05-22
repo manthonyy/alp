@@ -20,6 +20,7 @@ public class Transaction {
 
     public void displayTransaction(){
         System.out.println("Transaction ID : "+ transactionId);
+        System.out.println("Username : " + user.getUsername());
         System.out.println("Waste Type : "+ wasteItem.wasteName);
         System.out.println("Weight : "+ weight + " Kg");
         System.out.println("Points : "+ pointsEarned);
