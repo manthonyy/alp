@@ -19,12 +19,10 @@ public class WasteCenter {
         return handledWasteType;
     }
 
-    // Menghitung persentase kapasitas saat ini
     public double getLoadPercentage() {
         return (currentLoad / maxCapacity) * 100;
     }
 
-    // Menambahkan muatan baru ke center
     public void addLoad(double weight) {
         this.currentLoad += weight;
     }
