@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class Menu {
 
@@ -14,6 +16,7 @@ public class Menu {
 
     TransactionManager transactionManager = new TransactionManager();
     WasteQueueManager queueManager = new WasteQueueManager();
+    ReportGenerator reportGenerator = new ReportGenerator(transactionManager, userList);
 
     User admin =
             new User(
@@ -288,7 +291,7 @@ public class Menu {
                 break;
 
             case 3:
-                System.out.println("Generate Report");
+                generateReportMenu();
                 break;
 
             case 4:
@@ -326,6 +329,60 @@ public class Menu {
 
             default:
                 System.out.println("Invalid Menu");
+            }
+        }
+    }
+
+    public void generateReportMenu() {
+
+        while (true) {
+
+            System.out.println("=== GENERATE REPORT ===");
+            System.out.println("1. Transaction Report");
+            System.out.println("2. Waste Report");
+            System.out.println("3. User Report");
+            System.out.println("4. Back to Admin Menu");
+            System.out.print("Choose Report Type: ");
+
+            int choice = x.nextInt();
+            x.nextLine();
+
+            if (choice == 4) break;
+
+            switch (choice) {
+                case 1:
+                    reportGenerator.generateTransactionReport();
+                    askExportPdf("Transaction", choice);
+                    break;
+                case 2:
+                    reportGenerator.generateWasteReport();
+                    askExportPdf("Waste", choice);
+                    break;
+                case 3:
+                    reportGenerator.generateUserReport();
+                    askExportPdf("User", choice);
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private void askExportPdf(String reportName, int type) {
+        System.out.print("\nExport " + reportName + " Report as PDF? (y/n): ");
+        String ans = x.next();
+        x.nextLine();
+        if (ans.equalsIgnoreCase("y")) {
+            switch (type) {
+                case 1:    
+                    reportGenerator.exportTransactionReportToPdf(); 
+                    break;
+                case 2: 
+                    reportGenerator.exportWasteReportToPdf();      
+                    break;
+                case 3: 
+                    reportGenerator.exportUserReportToPdf();        
+                    break;
             }
         }
     }

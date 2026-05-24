@@ -44,7 +44,7 @@ public class TransactionManager {
     public void systemMonitoring(){
         System.out.println("===== SYSTEM MONITORING =====");
         System.out.println("Total Transactions : "+ transactionList.size());
-        System.out.println("Total Waste : "+ calculateTotalWaste()+ " Kg");
+        System.out.println("Total Waste  : "+ calculateTotalWaste()+ " Kg");
         System.out.println("Total Points : "+ calculateTotalPoints());
     }
 
