@@ -3,7 +3,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WasteQueueManager {
-    // Implementasi Queue menggunakan LinkedList agar bisa addFirst dan addLast
     private LinkedList<WasteItem> wasteQueue = new LinkedList<>();
     private List<WasteCenter> centers = new ArrayList<>();
 
@@ -11,10 +10,9 @@ public class WasteQueueManager {
         initializeCenters();
     }
 
-    // Inisialisasi data dummy untuk membandingkan kapasitas pabrik (Recommendation System)
     private void initializeCenters() {
-        centers.add(new WasteCenter("Plastic Recycling Center A", "Plastic Waste", 950, 1000)); // Load 95%
-        centers.add(new WasteCenter("Plastic Recycling Center B", "Plastic Waste", 400, 1000)); // Load 40%
+        centers.add(new WasteCenter("Plastic Recycling Center A", "Plastic Waste", 950, 1000)); 
+        centers.add(new WasteCenter("Plastic Recycling Center B", "Plastic Waste", 400, 1000)); 
         
         centers.add(new WasteCenter("Organic Waste Center A", "Organic Waste", 800, 1000));
         centers.add(new WasteCenter("Organic Waste Center B", "Organic Waste", 150, 1000));
@@ -26,9 +24,8 @@ public class WasteQueueManager {
         centers.add(new WasteCenter("Glass Processing Center", "Glass Waste", 600, 1000));
     }
 
-    // Menambah sampah ke antrian
+
     public void addWasteToQueue(WasteItem waste) {
-        // Priority check: OrganicWaste dan EWaste masuk depan antrian
         if (waste instanceof OrganicWaste || waste instanceof EWaste) {
             wasteQueue.addFirst(waste);
             System.out.println(waste.wasteName + " Has been added to the FRONT of the queue (Priority Waste)");
@@ -38,16 +35,14 @@ public class WasteQueueManager {
         }
     }
 
-    // Sistem Rekomendasi berdasarkan Load terkecil (kapasitas paling optimal)
     public WasteCenter recommendBestCenter(String wasteName) {
         WasteCenter bestCenter = null;
-        double lowestLoad = 101.0; // Set di atas 100% sebagai nilai inisial
+        double lowestLoad = 101.0;
 
         for (WasteCenter center : centers) {
             if (center.getHandledWasteType().equals(wasteName)) {
                 double currentLoadPct = center.getLoadPercentage();
                 
-                // Cari load paling kecil / kapasitas tersisa paling banyak
                 if (currentLoadPct < lowestLoad) {
                     lowestLoad = currentLoadPct;
                     bestCenter = center;
@@ -57,7 +52,6 @@ public class WasteQueueManager {
         return bestCenter;
     }
 
-    // Memproses seluruh antrian dengan prinsip FIFO
     public void processQueue() {
         if (wasteQueue.isEmpty()) {
             System.out.println("Waste Queue is empty. No waste to process");
@@ -82,16 +76,12 @@ public class WasteQueueManager {
 
         if (!centerExists) {
             System.out.println("Status: FAILED. No Waste Center found for: " + wasteToProcess.wasteName);
-            // Karena tidak ada center yang cocok, kita bisa membuang atau menyimpannya di list terpisah
-            // Di sini kita masukkan ke antrian lagi dengan pesan peringatan
             wasteQueue.addLast(wasteToProcess);
         } else {
-            // 2. Jika center ada, cari yang terbaik
             WasteCenter optimalCenter = recommendBestCenter(wasteToProcess.wasteName);
             double weightAdded = wasteToProcess.weight;
             double newLoadPercentage = ((optimalCenter.getCurrentLoad() + weightAdded) / optimalCenter.getMaxCapacity()) * 100;
         
-        // Pengecekan apakah ada center yang tersedia DAN kapasitasnya belum penuh
             if (optimalCenter != null && newLoadPercentage < 100.0) {
                 System.out.println("Processing: " + wasteToProcess.wasteName);
                 System.out.printf("Optimal Recommendation : %s (Load: %.2f%%)\n", optimalCenter.getName(), optimalCenter.getLoadPercentage());
