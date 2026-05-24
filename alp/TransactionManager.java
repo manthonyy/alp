@@ -1,21 +1,21 @@
-import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TransactionManager {
     ArrayList<Transaction> transactionList=new ArrayList<>();
 
     public void addTransaction(Transaction transaction){
         transactionList.add(transaction);
-        System.out.println("Transaction berhasil ditambahkan!");
+        System.out.println("Transaction has been successfully added!");
     }
 
     public void showAllTransactions(){
         if(transactionList.isEmpty()){
-            System.out.println("Belum ada transaksi.");
+            System.out.println("No transaction data available.");
             return;
         }
-        System.out.println("===== LIST TRANSAKSI =====");
+        System.out.println("===== TRANSACTION LIST =====");
         for(Transaction transaction: transactionList){
             transaction.displayTransaction();
         }
@@ -30,7 +30,7 @@ public class TransactionManager {
     }
 
     public void showTotalWaste(){
-        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " Kg");
+        System.out.println("Total Waste : "+ calculateTotalWaste()+ " Kg");
     }
 
     public int calculateTotalPoints(){
@@ -43,8 +43,8 @@ public class TransactionManager {
 
     public void systemMonitoring(){
         System.out.println("===== SYSTEM MONITORING =====");
-        System.out.println("Jumlah Transaksi : "+ transactionList.size());
-        System.out.println("Total Sampah : "+ calculateTotalWaste()+ " Kg");
+        System.out.println("Total Transactions : "+ transactionList.size());
+        System.out.println("Total Waste : "+ calculateTotalWaste()+ " Kg");
         System.out.println("Total Points : "+ calculateTotalPoints());
     }
 

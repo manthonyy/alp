@@ -6,6 +6,7 @@ public class User {
     private UserRole role;
     private int totalPoints;
     ArrayList<Transaction> transactionHistory = new ArrayList<>();
+    
     public User(String userId, String username, String password, UserRole role) {
         this.userId = userId;
         this.username = username;

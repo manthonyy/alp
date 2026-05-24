@@ -13,6 +13,7 @@ public class Menu {
     User currentUser;
 
     TransactionManager transactionManager = new TransactionManager();
+    WasteQueueManager queueManager = new WasteQueueManager();
 
     User admin =
             new User(
@@ -235,7 +236,7 @@ public class Menu {
                 return;
         }
 
-        int points =waste.calculatePoints();
+        int points = waste.calculatePoints();
         currentUser.addPoints(points);
         Transaction t =new Transaction("TRX" +(currentUser.transactionHistory.size() + 1),currentUser,waste,weight,points);
             transactionManager.addTransaction(t);
@@ -245,6 +246,9 @@ public class Menu {
             System.out.println("Waste Successfully Deposited!");
             System.out.println("Points Earned : "+ points);
             waste.displayWasteInfo();
+
+            System.out.println("\nAdding to Waste Queue.....");
+            queueManager.addWasteToQueue(waste);
             }
 
     public void adminMenu(){
@@ -255,7 +259,7 @@ public class Menu {
         System.out.println("1. View All Users");
         System.out.println("2. Process Waste");
         System.out.println("3. Generate Report");
-        System.out.println("4. Upgrade Facility");
+        System.out.println("4. Display Facility Info & Upgrade");
         System.out.println("5. View All Transactions");
         System.out.println("6. Total Waste");
         System.out.println("7. Logout");
@@ -271,7 +275,16 @@ public class Menu {
                 break;
 
             case 2:
-                System.out.println("Process Waste");
+                queueManager.displayQueue(); 
+                System.out.print("Do you want to process the queue now? (y/n): ");
+                String confirm = x.next();
+                x.nextLine(); 
+                
+                if (confirm.equalsIgnoreCase("y")) {
+                    queueManager.processQueue();
+                } else {
+                    System.out.println("Process cancelled.");
+                }
                 break;
 
             case 3:
@@ -279,9 +292,27 @@ public class Menu {
                 break;
 
             case 4:
-                System.out.println("Upgrade Facility");
-                break;
+                while (true) {
+                queueManager.displayCenters();
+                System.out.print("Do you want to upgrade a center's capacity? (y/n): "); 
+                String upgradeConfirm = x.next();
+                x.nextLine();
 
+                if (!upgradeConfirm.equalsIgnoreCase("y")) {
+                    break;
+                }
+
+                System.out.print("Choose Center to Upgrade : ");
+                int choice = x.nextInt();
+                x.nextLine();
+                System.out.print("Input Additional Capacity (Kg): ");
+                double amount = x.nextDouble();
+                x.nextLine();
+                
+                queueManager.upgradeCenter(choice - 1, amount);
+                break;
+                }
+                break;
             case 5:
                 transactionManager.showAllTransactions();
                 break;
