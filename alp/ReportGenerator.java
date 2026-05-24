@@ -28,10 +28,9 @@ public class ReportGenerator {
     private TransactionManager transactionManager;
     private ArrayList<User> userList;
 
-    // iText7 color constants
-    private static final DeviceRgb COLOR_HEADER_BG  = new DeviceRgb(39, 78, 19);   // Dark green
-    private static final DeviceRgb COLOR_SUBHEADER   = new DeviceRgb(56, 118, 29);  // Medium green
-    private static final DeviceRgb COLOR_ROW_ALT     = new DeviceRgb(217, 234, 211); // Light green
+    private static final DeviceRgb COLOR_HEADER_BG  = new DeviceRgb(39, 78, 19);   //Dark green
+    private static final DeviceRgb COLOR_SUBHEADER   = new DeviceRgb(56, 118, 29);  //Medium green
+    private static final DeviceRgb COLOR_ROW_ALT     = new DeviceRgb(217, 234, 211); //Light green
     private static final DeviceRgb COLOR_WHITE        = new DeviceRgb(255, 255, 255);
     private static final DeviceRgb COLOR_DARK_TEXT    = new DeviceRgb(30, 30, 30);
 
@@ -39,10 +38,6 @@ public class ReportGenerator {
         this.transactionManager = transactionManager;
         this.userList = userList;
     }
-
-    // ─────────────────────────────────────────────
-    //  CONSOLE DISPLAY METHODS
-    // ─────────────────────────────────────────────
 
     public void generateTransactionReport() {
         System.out.println("=== TRANSACTION REPORT ===");
@@ -88,7 +83,6 @@ public class ReportGenerator {
             return;
         }
 
-        // Aggregate waste by type
         Map<String, Double> wasteByType  = new HashMap<>();
         Map<String, Integer> countByType = new HashMap<>();
 
@@ -146,11 +140,6 @@ public class ReportGenerator {
         System.out.println("══════════════════════════════════════════");
     }
 
-    // ─────────────────────────────────────────────
-    //  PDF EXPORT METHODS  (iText 7)
-    // ─────────────────────────────────────────────
-
-    /** Exports a Transaction Report to PDF. */
     public void exportTransactionReportToPdf() {
         String filename = "Transaction_Report_" + getFileTimestamp() + ".pdf";
         try {
@@ -161,13 +150,11 @@ public class ReportGenerator {
             PdfFont boldFont   = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
             PdfFont normalFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
 
-            // Title block
             addReportHeader(document, boldFont, "TRANSACTION REPORT",
                     "Smart Waste Management System");
 
             ArrayList<Transaction> transactions = transactionManager.transactionList;
 
-            // Summary section
             addSectionTitle(document, boldFont, "Summary");
             Table summary = new Table(UnitValue.createPercentArray(new float[]{50, 50}))
                     .setWidth(UnitValue.createPercentValue(100));
@@ -177,7 +164,6 @@ public class ReportGenerator {
             document.add(summary);
             document.add(new Paragraph("\n"));
 
-            // Detail table
             addSectionTitle(document, boldFont, "Transaction Detail");
 
             if (transactions.isEmpty()) {
@@ -211,7 +197,6 @@ public class ReportGenerator {
         }
     }
 
-    /** Exports a Waste Report to PDF. */
     public void exportWasteReportToPdf() {
         String filename = "Waste_Report_" + getFileTimestamp() + ".pdf";
         try {
@@ -227,7 +212,6 @@ public class ReportGenerator {
 
             ArrayList<Transaction> transactions = transactionManager.transactionList;
 
-            // Aggregate
             Map<String, Double>  wasteByType  = new HashMap<>();
             Map<String, Integer> countByType  = new HashMap<>();
             Map<String, Integer> pointsByType = new HashMap<>();
@@ -239,7 +223,6 @@ public class ReportGenerator {
                 pointsByType.put(type, pointsByType.getOrDefault(type, 0) + t.pointsEarned);
             }
 
-            // Summary
             addSectionTitle(document, boldFont, "Summary");
             Table summary = new Table(UnitValue.createPercentArray(new float[]{50, 50}))
                     .setWidth(UnitValue.createPercentValue(100));
@@ -250,7 +233,6 @@ public class ReportGenerator {
             document.add(summary);
             document.add(new Paragraph("\n"));
 
-            // Detail table
             addSectionTitle(document, boldFont, "Waste Breakdown by Type");
 
             if (wasteByType.isEmpty()) {
@@ -284,7 +266,6 @@ public class ReportGenerator {
         }
     }
 
-    /** Exports a User Activity Report to PDF. */
     public void exportUserReportToPdf() {
         String filename = "User_Report_" + getFileTimestamp() + ".pdf";
         try {
@@ -298,7 +279,6 @@ public class ReportGenerator {
             addReportHeader(document, boldFont, "USER ACTIVITY REPORT",
                     "Smart Waste Management System");
 
-            // Summary
             int totalDeposits = userList.stream()
                     .mapToInt(u -> u.transactionHistory.size()).sum();
 
@@ -312,7 +292,6 @@ public class ReportGenerator {
             document.add(summary);
             document.add(new Paragraph("\n"));
 
-            // User detail table
             addSectionTitle(document, boldFont, "User Activity Detail");
 
             if (userList.isEmpty()) {
@@ -346,36 +325,14 @@ public class ReportGenerator {
         }
     }
 
-    // ─────────────────────────────────────────────
-    //  PRIVATE PDF HELPER METHODS
-    // ─────────────────────────────────────────────
+    private void addReportHeader(Document doc, PdfFont boldFont, String title, String subtitle) throws IOException {
 
-    private void addReportHeader(Document doc, PdfFont boldFont,
-                                  String title, String subtitle) throws IOException {
-        // Main title
-        doc.add(new Paragraph(title)
-                .setFont(boldFont)
-                .setFontSize(20)
-                .setFontColor(COLOR_HEADER_BG)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setMarginBottom(4));
+        doc.add(new Paragraph(title).setFont(boldFont).setFontSize(20).setFontColor(COLOR_HEADER_BG).setTextAlignment(TextAlignment.CENTER).setMarginBottom(4));
 
-        // Subtitle
-        doc.add(new Paragraph(subtitle)
-                .setFont(boldFont)
-                .setFontSize(11)
-                .setFontColor(COLOR_SUBHEADER)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setMarginBottom(4));
+        doc.add(new Paragraph(subtitle).setFont(boldFont).setFontSize(11).setFontColor(COLOR_SUBHEADER).setTextAlignment(TextAlignment.CENTER).setMarginBottom(4));
 
-        // Timestamp
-        doc.add(new Paragraph("Generated: " + getTimestamp())
-                .setFontSize(9)
-                .setFontColor(ColorConstants.GRAY)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setMarginBottom(10));
+        doc.add(new Paragraph("Generated: " + getTimestamp()).setFontSize(9).setFontColor(ColorConstants.GRAY).setTextAlignment(TextAlignment.CENTER).setMarginBottom(10));
 
-        // Divider
         SolidLine line = new SolidLine(1.5f);
         line.setColor(COLOR_HEADER_BG);
         doc.add(new LineSeparator(line).setMarginBottom(12));
@@ -445,10 +402,6 @@ public class ReportGenerator {
                 .setTextAlignment(TextAlignment.CENTER)
                 .setMarginTop(4));
     }
-
-    // ─────────────────────────────────────────────
-    //  UTILITIES
-    // ─────────────────────────────────────────────
 
     private String getTimestamp() {
         return LocalDateTime.now()
