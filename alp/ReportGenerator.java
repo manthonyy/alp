@@ -28,9 +28,9 @@ public class ReportGenerator {
     private TransactionManager transactionManager;
     private ArrayList<User> userList;
 
-    private static final DeviceRgb COLOR_HEADER_BG  = new DeviceRgb(39, 78, 19);   //Dark green
-    private static final DeviceRgb COLOR_SUBHEADER   = new DeviceRgb(56, 118, 29);  //Medium green
-    private static final DeviceRgb COLOR_ROW_ALT     = new DeviceRgb(217, 234, 211); //Light green
+    private static final DeviceRgb COLOR_HEADER_BG  = new DeviceRgb(39, 78, 19);//dark green
+    private static final DeviceRgb COLOR_SUBHEADER   = new DeviceRgb(56, 118, 29);//medium green
+    private static final DeviceRgb COLOR_ROW_ALT     = new DeviceRgb(217, 234, 211);//light green
     private static final DeviceRgb COLOR_WHITE        = new DeviceRgb(255, 255, 255);
     private static final DeviceRgb COLOR_DARK_TEXT    = new DeviceRgb(30, 30, 30);
 
@@ -42,7 +42,7 @@ public class ReportGenerator {
     public void generateTransactionReport() {
         System.out.println("=== TRANSACTION REPORT ===");
         System.out.println("Generated : " + getTimestamp());
-        System.out.println("──────────────────────────────────────────");
+        System.out.println("────────────────────────────────────────────────────────────");
 
         ArrayList<Transaction> transactions = transactionManager.transactionList;
 
@@ -53,7 +53,7 @@ public class ReportGenerator {
 
         System.out.printf("%-10s %-15s %-15s %-10s %-8s%n",
                 "TRX ID", "Username", "Waste Type", "Weight", "Points");
-        System.out.println("──────────────────────────────────────────");
+        System.out.println("────────────────────────────────────────────────────────────");
 
         for (Transaction t : transactions) {
             System.out.printf("%-10s %-15s %-15s %-10.2f %-8d%n",
@@ -64,7 +64,7 @@ public class ReportGenerator {
                     t.pointsEarned);
         }
 
-        System.out.println("──────────────────────────────────────────");
+        System.out.println("────────────────────────────────────────────────────────────");
         System.out.println("Total Transactions : " + transactions.size());
         System.out.printf("Total Weight       : %.2f Kg%n", transactionManager.calculateTotalWaste());
         System.out.printf("Total Points Given : %d%n", transactionManager.calculateTotalPoints());
@@ -74,7 +74,7 @@ public class ReportGenerator {
     public void generateWasteReport() {
         System.out.println("=== WASTE REPORT ===");
         System.out.println("Generated : " + getTimestamp());
-        System.out.println("──────────────────────────────────────────");
+        System.out.println("────────────────────────────────────────────────────────────");
 
         ArrayList<Transaction> transactions = transactionManager.transactionList;
 
@@ -93,7 +93,7 @@ public class ReportGenerator {
         }
 
         System.out.printf("%-20s %-15s %-12s%n", "Waste Type", "Total Weight", "# Deposits");
-        System.out.println("──────────────────────────────────────────");
+        System.out.println("────────────────────────────────────────────────────────────");
 
         for (Map.Entry<String, Double> entry : wasteByType.entrySet()) {
             System.out.printf("%-20s %-15.2f %-12d%n",
@@ -190,7 +190,7 @@ public class ReportGenerator {
             addFooter(document, normalFont);
             document.close();
 
-            System.out.println("✔ Transaction Report exported: " + filename);
+            System.out.println("Transaction Report exported: " + filename);
 
         } catch (IOException e) {
             System.out.println("Error exporting Transaction Report PDF: " + e.getMessage());
@@ -212,6 +212,7 @@ public class ReportGenerator {
 
             ArrayList<Transaction> transactions = transactionManager.transactionList;
 
+            // Aggregate
             Map<String, Double>  wasteByType  = new HashMap<>();
             Map<String, Integer> countByType  = new HashMap<>();
             Map<String, Integer> pointsByType = new HashMap<>();
@@ -259,7 +260,7 @@ public class ReportGenerator {
             addFooter(document, normalFont);
             document.close();
 
-            System.out.println("✔ Waste Report exported: " + filename);
+            System.out.println("Waste Report exported: " + filename);
 
         } catch (IOException e) {
             System.out.println("Error exporting Waste Report PDF: " + e.getMessage());
@@ -318,20 +319,34 @@ public class ReportGenerator {
             addFooter(document, normalFont);
             document.close();
 
-            System.out.println("✔ User Report exported: " + filename);
+            System.out.println("User Report exported: " + filename);
 
         } catch (IOException e) {
             System.out.println("Error exporting User Report PDF: " + e.getMessage());
         }
     }
 
-    private void addReportHeader(Document doc, PdfFont boldFont, String title, String subtitle) throws IOException {
+    private void addReportHeader(Document doc, PdfFont boldFont,
+                                String title, String subtitle) throws IOException {
+        doc.add(new Paragraph(title)
+                .setFont(boldFont)
+                .setFontSize(20)
+                .setFontColor(COLOR_HEADER_BG)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(4));
 
-        doc.add(new Paragraph(title).setFont(boldFont).setFontSize(20).setFontColor(COLOR_HEADER_BG).setTextAlignment(TextAlignment.CENTER).setMarginBottom(4));
+        doc.add(new Paragraph(subtitle)
+                .setFont(boldFont)
+                .setFontSize(11)
+                .setFontColor(COLOR_SUBHEADER)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(4));
 
-        doc.add(new Paragraph(subtitle).setFont(boldFont).setFontSize(11).setFontColor(COLOR_SUBHEADER).setTextAlignment(TextAlignment.CENTER).setMarginBottom(4));
-
-        doc.add(new Paragraph("Generated: " + getTimestamp()).setFontSize(9).setFontColor(ColorConstants.GRAY).setTextAlignment(TextAlignment.CENTER).setMarginBottom(10));
+        doc.add(new Paragraph("Generated: " + getTimestamp())
+                .setFontSize(9)
+                .setFontColor(ColorConstants.GRAY)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(10));
 
         SolidLine line = new SolidLine(1.5f);
         line.setColor(COLOR_HEADER_BG);
@@ -380,7 +395,7 @@ public class ReportGenerator {
     }
 
     private void addDataRow(Table table, PdfFont normalFont,
-                             DeviceRgb rowBg, String... values) throws IOException {
+                            DeviceRgb rowBg, String... values) throws IOException {
         for (String val : values) {
             table.addCell(new Cell()
                     .add(new Paragraph(val).setFont(normalFont).setFontSize(9))

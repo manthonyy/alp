@@ -6,11 +6,10 @@ public class Menu {
 
     Scanner x = new Scanner(System.in);
 
-    HashMap<String, String> accountData =
-            new HashMap<>();
+    HashMap<String, String> accountData = new HashMap<>();
 
-    ArrayList<User> userList =
-            new ArrayList<>();
+    ArrayList<User> userList = new ArrayList<>();
+    ArrayList<Voucher> voucherList = new ArrayList<>();
 
     User currentUser;
 
@@ -171,10 +170,9 @@ public class Menu {
 
             switch(menu) {
 
-                case 1:
+            case 1:
                 depositWaste();
                 break;
-
             case 2:
                 System.out.println("Total Points : "+ currentUser.getTotalPoints());
                 break;
@@ -182,8 +180,9 @@ public class Menu {
                 currentUser.viewTransactionHistory();
                 break;
             case 4:
-                System.out.println("fitur belum tersedia");
-                case 5:
+                redeemVoucher();
+                break;
+            case 5:
                 return;
             default:
                 System.out.println("Invalid Menu");
@@ -386,6 +385,35 @@ public class Menu {
             }
         }
     }
+
+    public void redeemVoucher() {
+        System.out.println("=== REDEEM VOUCHER ===");
+        System.out.println("Your Points     : " + currentUser.getTotalPoints());
+        System.out.println("Conversion Rate : 1 pt = Rp " + Voucher.RUPIAH_PER_POINT);
+        System.out.println("Minimum Redeem  : 100 pts");
+
+        if (currentUser.getTotalPoints() < Voucher.getMinimumPoints()) {
+            System.out.println("You don't have enough points to redeem.");
+            System.out.println("Minimum required: " + Voucher.getMinimumPoints() + " points.");
+            return;
+        }
+
+        System.out.print("Enter points to redeem (multiples of 100): ");
+        int points = x.nextInt();
+        x.nextLine();
+
+        Voucher voucher = Voucher.redeem(currentUser, points);
+
+        if (voucher != null) {
+            voucherList.add(voucher);
+            System.out.println("\nVoucher successfully created!");
+            voucher.displayVoucher();
+            System.out.println("Remaining Points: " + currentUser.getTotalPoints());
+            System.out.println("\nExporting voucher to PDF...");
+            voucher.exportToPdf();
+        }
+    }
+
         public void viewAllUsers(){
 
         System.out.println("===== USER LIST =====");

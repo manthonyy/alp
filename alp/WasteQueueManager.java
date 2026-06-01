@@ -11,13 +11,13 @@ public class WasteQueueManager {
     }
 
     private void initializeCenters() {
-        centers.add(new WasteCenter("Plastic Recycling Center A", "Plastic Waste", 950, 1000));
-        centers.add(new WasteCenter("Plastic Recycling Center B", "Plastic Waste", 400, 1000));
+        centers.add(new WasteCenter("Plastic Recycling Center A", "Plastic Waste", 950, 1000)); 
+        centers.add(new WasteCenter("Plastic Recycling Center B", "Plastic Waste", 400, 1000)); 
         
         centers.add(new WasteCenter("Organic Waste Center A", "Organic Waste", 800, 1000));
         centers.add(new WasteCenter("Organic Waste Center B", "Organic Waste", 150, 1000));
         
-        centers.add(new WasteCenter("E-Waste Processing Center A", "E-Waste", 300, 1000));
+        centers.add(new WasteCenter("E-Waste Processing Center", "E-Waste", 300, 1000));
         
         centers.add(new WasteCenter("Metal Recycling Center", "Metal Waste", 500, 1000));
 
@@ -33,14 +33,14 @@ public class WasteQueueManager {
             System.out.println(waste.wasteName + " Has been added to the BACK of the queue");
         }
     }
-
     public WasteCenter recommendBestCenter(String wasteName) {
         WasteCenter bestCenter = null;
-        double lowestLoad = 101.0;
+        double lowestLoad = 101.0; 
 
         for (WasteCenter center : centers) {
             if (center.getHandledWasteType().equals(wasteName)) {
                 double currentLoadPct = center.getLoadPercentage();
+                
                 if (currentLoadPct < lowestLoad) {
                     lowestLoad = currentLoadPct;
                     bestCenter = center;
@@ -85,7 +85,7 @@ public class WasteQueueManager {
                 System.out.printf("Optimal Recommendation : %s (Load: %.2f%%)\n", optimalCenter.getName(), optimalCenter.getLoadPercentage());
                 
                 optimalCenter.addLoad(wasteToProcess.weight);
-                System.out.println("Status              : Successfully sent to " + optimalCenter.getName());
+                System.out.println("Status : Successfully sent to " + optimalCenter.getName());
             } else {
                 wasteQueue.addLast(wasteToProcess);
                 System.out.println("Status: FAILED. Center for " + wasteToProcess.wasteName + " is FULL. Re-queued for later processing.");
