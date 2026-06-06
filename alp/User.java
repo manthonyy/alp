@@ -5,6 +5,8 @@ public class User {
     private String password;
     private UserRole role;
     private int totalPoints;
+    private int totalPointsEarned;
+    private UserTier userTier = UserTier.BRONZE;
     ArrayList<Transaction> transactionHistory = new ArrayList<>();
     
     public User(String userId, String username, String password, UserRole role) {
@@ -18,6 +20,23 @@ public class User {
     public double getTotalKgDeposited() {
         return transactionHistory.stream().mapToDouble(t -> t.weight).sum();
     }
+
+    public void addPoints(int points) {
+        int earned = (int)(points * userTier.multiplier);
+        totalPoints     += earned;
+        totalPointsEarned += earned;
+        updateTier();
+    }   
+
+    private void updateTier() {
+    UserTier[] levels = UserTier.values();
+    for (int i = levels.length - 1; i >= 0; i--) {
+        if (totalPointsEarned >= levels[i].threshold) {
+            userTier = levels[i];
+            return;
+        }
+    }
+}
 
     public String getUserId() {
         return userId;
@@ -34,11 +53,14 @@ public class User {
     public int getTotalPoints(){
         return totalPoints;
     }
-    public void addPoints(int points) {
-        totalPoints += points;
-    }
     public void reducePoints(int points) {
         totalPoints -= points;
+    }
+    public int getTotalPointsEarned(){
+        return totalPointsEarned;
+    }
+    public UserTier getUserTier() {
+        return userTier;
     }
 
     public void viewTransactionHistory(){

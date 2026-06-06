@@ -164,7 +164,10 @@ public class Menu {
                 depositWaste();
                 break;
             case 2:
-                System.out.println("Total Points : "+ currentUser.getTotalPoints());
+                System.out.println("Tier   : " + currentUser.getUserTier());
+                System.out.println("Points : " + currentUser.getTotalPoints());
+                System.out.println("Earned : " + currentUser.getTotalPointsEarned());
+                System.out.printf ("Bonus  : %.1fx multiplier%n",currentUser.getUserTier().multiplier);
                 break;
             case 3:
                 currentUser.viewTransactionHistory();
@@ -231,13 +234,18 @@ public class Menu {
 
         int points = waste.calculatePoints();
         currentUser.addPoints(points);
+        int earned = (int)(points * currentUser.getUserTier().multiplier);
+
         Transaction t =new Transaction("TRX" +(currentUser.transactionHistory.size() + 1),currentUser,waste,weight,points);
             transactionManager.addTransaction(t);
             currentUser.transactionHistory.add(t);
             transactionManager.saveAllTransactionsToFile();
             transactionManager.saveUserTransactionHistory(currentUser);
             System.out.println("Waste Successfully Deposited!");
-            System.out.println("Points Earned : "+ points);
+            System.out.println("Tier          : " + currentUser.getUserTier());
+            System.out.println("Multiplier    : " + currentUser.getUserTier().multiplier + "x");
+            System.out.println("Base Points   : " + points);
+            System.out.println("Points Earned : " + earned);
             waste.displayWasteInfo();
 
             System.out.println("\nAdding to Waste Queue.....");
