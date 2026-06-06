@@ -1,6 +1,9 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class TransactionManager {
     ArrayList<Transaction> transactionList=new ArrayList<>();
@@ -48,9 +51,25 @@ public class TransactionManager {
         System.out.println("Total Points : "+ calculateTotalPoints());
     }
 
+    public List<Transaction> searchTransactions(
+        String username,
+        String wasteType,
+        double minWeight,
+        double maxWeight,
+        int    minPoints,
+        int    maxPoints) {
+
+    return transactionList.stream()
+        .filter(t -> username == null || t.user.getUsername().equalsIgnoreCase(username))
+        .filter(t -> wasteType == null || t.wasteItem.wasteName.equalsIgnoreCase(wasteType))
+        .filter(t -> t.weight >= minWeight && t.weight <= maxWeight)
+        .filter(t -> t.pointsEarned >= minPoints && t.pointsEarned <= maxPoints)
+        .collect(Collectors.toList());
+}
+
     public void saveAllTransactionsToFile(){
         try{
-            FileWriter writer=new FileWriter("all_transactions.txt");
+            FileWriter writer = new FileWriter("all_transactions.txt");
             for(Transaction transaction : transactionList){
                 writer.write("Transaction ID : "+ transaction.transactionId + "\n");
                 writer.write("Username : "+ transaction.user.getUsername() + "\n");

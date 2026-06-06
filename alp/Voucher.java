@@ -1,3 +1,11 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
@@ -14,10 +22,7 @@ import com.itextpdf.layout.element.LineSeparator;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue; 
-import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.itextpdf.layout.properties.UnitValue;
 
 public class Voucher {
         private static final int POINTS_PER_10K = 100;
@@ -80,7 +85,7 @@ public class Voucher {
                 }
 
                 if (pointsToRedeem % POINTS_PER_10K != 0) {
-                System.out.println("Points must be a multiple of 100. (e.g. 100, 200, 300...)");
+                System.out.println("Points must be a multiple of 100");
                 return null;
                 }
 

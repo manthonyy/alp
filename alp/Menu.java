@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -17,20 +18,8 @@ public class Menu {
     WasteQueueManager queueManager = new WasteQueueManager();
     ReportGenerator reportGenerator = new ReportGenerator(transactionManager, userList);
 
-    User admin =
-            new User(
-                    "ADM001",
-                    "admin",
-                    "admin",
-                    UserRole.ADMIN
-            );
-    User user1 =
-            new User(
-                    "USR001",
-                    "user",
-                    "user",
-                    UserRole.USER
-            );
+    User admin = new User("ADM001","admin","admin",UserRole.ADMIN);
+    User user1 = new User("USR001","user","user",UserRole.USER);
 
     public void menuAwal() {
 
@@ -162,7 +151,8 @@ public class Menu {
             System.out.println("2. View Points");
             System.out.println("3. Transaction History");
             System.out.println("4. Redeem Voucher");
-            System.out.println("5. Logout");
+            System.out.println("5. Show Leaderboard");
+            System.out.println("6. Logout");
             System.out.print("Choose Menu: ");
 
             int menu = x.nextInt();
@@ -183,6 +173,9 @@ public class Menu {
                 redeemVoucher();
                 break;
             case 5:
+                showLeaderboard();
+                break;
+            case 6:
                 return;
             default:
                 System.out.println("Invalid Menu");
@@ -200,8 +193,6 @@ public class Menu {
         System.out.println("4. Organic Waste");
         System.out.println("5. E-Waste");
         System.out.print("Choose Waste Type: ");
-
-        System.out.print("Choose Waste : ");
 
         int choice = x.nextInt();
 
@@ -264,7 +255,9 @@ public class Menu {
         System.out.println("4. Display Facility Info & Upgrade");
         System.out.println("5. View All Transactions");
         System.out.println("6. Total Waste");
-        System.out.println("7. Logout");
+        System.out.println("7. Search Transactions");
+        System.out.println("8. Show Leaderboard");
+        System.out.println("9. Logout");
         System.out.print("Choose Menu: ");
 
         int menu = x.nextInt();
@@ -324,13 +317,78 @@ public class Menu {
                 break;
 
             case 7:
-                return;
+                searchTransactionMenu();
+                break;
 
+            case 8:
+                showLeaderboard();
+                break; 
+
+            case 9:
+                return;
             default:
                 System.out.println("Invalid Menu");
             }
         }
     }
+
+    public void searchTransactionMenu() {
+        System.out.print("Username (press enter to skip): ");
+        String username = x.nextLine();
+        if (username.isEmpty()) username = null;
+
+        System.out.print("Waste type (press enter to skip): ");
+        String wtype = x.nextLine();
+        if (wtype.isEmpty()) wtype = null;
+
+        System.out.print("Min weight (0 = no limit): ");
+        double minW = x.nextDouble();
+        System.out.print("Max weight (0 = no limit): ");
+        double maxWInput = x.nextDouble(); 
+        x.nextLine();
+        double maxW;
+            if (maxWInput <= 0) {
+                maxW = Double.MAX_VALUE;
+            } else {
+                maxW = maxWInput;
+            }
+
+        List<Transaction> results = transactionManager.searchTransactions(username, wtype, minW, maxW, 0, Integer.MAX_VALUE);
+
+        if (results.isEmpty())
+            System.out.println("No results found.");
+        else
+            for (Transaction t : results) {
+                t.displayTransaction();
+            }
+    }
+
+    public void showLeaderboard() {
+    System.out.println("Sort by: 1.Points");
+    System.out.println("         2.Total Waste (Kg) Deposited");
+    System.out.println("         3.Number of Transactions");
+    int rank = x.nextInt(); x.nextLine();
+
+    ArrayList<User> ranked = new ArrayList<>(userList);
+
+    switch (rank) {
+        case 1:
+            ranked.sort((a,b) -> b.getTotalPoints() - a.getTotalPoints());
+            break;
+        case 2:
+            ranked.sort((a,b) -> Double.compare(b.getTotalKgDeposited(),a.getTotalKgDeposited()));
+            break;
+        case 3:
+            ranked.sort((a,b) -> b.transactionHistory.size()- a.transactionHistory.size());
+            break;
+    }
+
+    System.out.println("=== LEADERBOARD ===");
+    for (int i = 0; i < ranked.size(); i++) {
+        User u = ranked.get(i);
+        System.out.printf("%2d. %-15s | %5d pts | %.1f kg | %d deposits%n",i + 1,u.getUsername(),u.getTotalPoints(),u.getTotalKgDeposited(),u.transactionHistory.size());
+    }
+}
 
     public void generateReportMenu() {
 

@@ -14,6 +14,11 @@ public class User {
         this.role = role;
         totalPoints = 0;
     }
+
+    public double getTotalKgDeposited() {
+        return transactionHistory.stream().mapToDouble(t -> t.weight).sum();
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -29,8 +34,13 @@ public class User {
     public int getTotalPoints(){
         return totalPoints;
     }
-    public void addPoints(int points) {totalPoints += points;}
-    public void reducePoints(int points) {totalPoints -= points;}
+    public void addPoints(int points) {
+        totalPoints += points;
+    }
+    public void reducePoints(int points) {
+        totalPoints -= points;
+    }
+
     public void viewTransactionHistory(){
     if(transactionHistory.isEmpty()){
         System.out.println("No Transaction History");
