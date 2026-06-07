@@ -1,10 +1,9 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class WasteQueueManager {
     private LinkedList<WasteItem> wasteQueue = new LinkedList<>();
-    private List<WasteCenter> centers = new ArrayList<>();
+    private ArrayList<WasteCenter> centers = new ArrayList<>();
 
     public WasteQueueManager() {
         initializeCenters();

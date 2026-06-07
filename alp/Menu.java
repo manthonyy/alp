@@ -152,7 +152,8 @@ public class Menu {
             System.out.println("3. Transaction History");
             System.out.println("4. Redeem Voucher");
             System.out.println("5. Show Leaderboard");
-            System.out.println("6. Logout");
+            System.out.println("6. Show Sustainability Rank");
+            System.out.println("7. Logout");
             System.out.print("Choose Menu: ");
 
             int menu = x.nextInt();
@@ -179,6 +180,9 @@ public class Menu {
                 showLeaderboard();
                 break;
             case 6:
+                showSustainabilityScore(currentUser);
+                break;
+            case 7:
                 return;
             default:
                 System.out.println("Invalid Menu");
@@ -241,6 +245,7 @@ public class Menu {
             currentUser.transactionHistory.add(t);
             transactionManager.saveAllTransactionsToFile();
             transactionManager.saveUserTransactionHistory(currentUser);
+            System.out.println();
             System.out.println("Waste Successfully Deposited!");
             System.out.println("Tier          : " + currentUser.getUserTier());
             System.out.println("Multiplier    : " + currentUser.getUserTier().multiplier + "x");
@@ -253,9 +258,7 @@ public class Menu {
             }
 
     public void adminMenu(){
-
     while(true){
-
         System.out.println("===== ADMIN MENU =====");
         System.out.println("1. View All Users");
         System.out.println("2. Process Waste");
@@ -371,10 +374,23 @@ public class Menu {
             }
     }
 
+    public void showSustainabilityScore(User user) {
+    int score = user.getSustainabilityScore();
+    System.out.println("===== SUSTAINABILITY SCORE =====");
+    System.out.println("User      : " + user.getUsername());
+    System.out.println("Score     : " + score);
+    System.out.println("Rank      : " + user.getSustainabilityRank());
+    System.out.println("--------------------------------");
+    System.out.printf ("Kg Deposited    : %.1f kg%n", user.getTotalKgDeposited());
+    System.out.println("Transactions    : " + user.transactionHistory.size());
+    System.out.println("================================");
+    }
+
     public void showLeaderboard() {
     System.out.println("Sort by: 1.Points");
     System.out.println("         2.Total Waste (Kg) Deposited");
     System.out.println("         3.Number of Transactions");
+    System.out.println("         4.Sustainability Score");
     int rank = x.nextInt(); x.nextLine();
 
     ArrayList<User> ranked = new ArrayList<>(userList);
@@ -389,12 +405,15 @@ public class Menu {
         case 3:
             ranked.sort((a,b) -> b.transactionHistory.size()- a.transactionHistory.size());
             break;
+        case 4:
+            ranked.sort((a, b) -> b.getSustainabilityScore() - a.getSustainabilityScore());
+            break;
     }
 
     System.out.println("=== LEADERBOARD ===");
     for (int i = 0; i < ranked.size(); i++) {
         User u = ranked.get(i);
-        System.out.printf("%2d. %-15s | %5d pts | %.1f kg | %d deposits%n",i + 1,u.getUsername(),u.getTotalPoints(),u.getTotalKgDeposited(),u.transactionHistory.size());
+        System.out.printf("%2d. %-15s | %5d pts | %.1f kg | %d deposits | Score: %d (%s)%n",i + 1, u.getUsername(), u.getTotalPoints(),u.getTotalKgDeposited(), u.transactionHistory.size(),u.getSustainabilityScore(), u.getSustainabilityRank());
     }
 }
 

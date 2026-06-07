@@ -5,12 +5,7 @@ public class Transaction {
     double weight;
     int pointsEarned;
 
-    public Transaction(
-            String transactionId,
-            User user,
-            WasteItem wasteItem,
-            double weight,
-            int pointsEarned){
+    public Transaction(String transactionId,User user,WasteItem wasteItem,double weight,int pointsEarned){
         this.transactionId = transactionId;
         this.user = user;
         this.wasteItem = wasteItem;

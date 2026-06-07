@@ -51,13 +51,7 @@ public class TransactionManager {
         System.out.println("Total Points : "+ calculateTotalPoints());
     }
 
-    public List<Transaction> searchTransactions(
-        String username,
-        String wasteType,
-        double minWeight,
-        double maxWeight,
-        int    minPoints,
-        int    maxPoints) {
+    public List<Transaction> searchTransactions(String username, String wasteType, double minWeight, double maxWeight, int minPoints, int maxPoints) {
 
     return transactionList.stream()
         .filter(t -> username == null || t.user.getUsername().equalsIgnoreCase(username))

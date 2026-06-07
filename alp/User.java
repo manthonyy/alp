@@ -30,13 +30,39 @@ public class User {
 
     private void updateTier() {
     UserTier[] levels = UserTier.values();
-    for (int i = levels.length - 1; i >= 0; i--) {
-        if (totalPointsEarned >= levels[i].threshold) {
-            userTier = levels[i];
-            return;
+        for (int i = levels.length - 1; i >= 0; i--) {
+            if (totalPointsEarned >= levels[i].threshold) {
+                userTier = levels[i];
+                return;
+            }
         }
     }
-}
+
+    public int getSustainabilityScore() {
+    int score = 0;
+
+    score += (int)(getTotalKgDeposited() * 2);
+
+    //bonus 20 kalo e-waste atau organic waste
+    for (Transaction t : transactionHistory) {
+        if (t.wasteItem instanceof EWaste || t.wasteItem instanceof OrganicWaste) {
+            score += 20;
+        }
+    }
+
+    score = (int)(score * userTier.multiplier);
+
+        return score;
+    }
+
+    public String getSustainabilityRank() {
+        int score = getSustainabilityScore();
+        if (score >= 2000) return "ECO CHAMPION";
+        if (score >= 1000) return "GREEN GUARDIAN";
+        if (score >= 500)  return "EARTH SAVER";
+        if (score >= 200)  return "ECO STARTER";
+        return "NEWCOMER";
+    }
 
     public String getUserId() {
         return userId;
