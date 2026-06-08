@@ -46,8 +46,8 @@ public class Voucher {
                 this.username       = username;
                 this.pointsRedeemed = pointsRedeemed;
                 this.voucherValue   = convertPointsToRupiah(pointsRedeemed);
-                this.createdAt      = LocalDateTime.now()
-                        .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+                this.createdAt      = LocalDateTime.now().format(DateTimeFormatter
+                                        .ofPattern("dd-MM-yyyy HH:mm:ss"));
         }
 
         private long convertPointsToRupiah(int points) {
@@ -167,15 +167,12 @@ public class Voucher {
                 addCardRow(inner, normalFont, boldFont, "Points Used", pointsRedeemed + " pts");
                 addCardRow(inner, normalFont, boldFont, "Issued On",   createdAt);
 
-                card.addCell(new Cell().add(inner)
-                        .setBackgroundColor(COLOR_LIGHT)
-                        .setBorder(new SolidBorder(COLOR_SECONDARY, 1.5f)).setPadding(16));
+                card.addCell(new Cell().add(inner).setBackgroundColor(COLOR_LIGHT).setBorder(new SolidBorder(COLOR_SECONDARY, 1.5f)).setPadding(16));
 
                 document.add(card);
                 document.add(new Paragraph("\n"));
 
-                document.add(new Paragraph("Terms & Conditions")
-                        .setFont(boldFont).setFontSize(10).setFontColor(COLOR_PRIMARY).setMarginBottom(4));
+                document.add(new Paragraph("Terms & Conditions").setFont(boldFont).setFontSize(10).setFontColor(COLOR_PRIMARY).setMarginBottom(4));
 
                 String[] terms = {
                         "1. This voucher is valid for one-time use only.",
@@ -184,8 +181,7 @@ public class Voucher {
                         "4. This voucher is non-transferable."
                 };
                 for (String term : terms) {
-                        document.add(new Paragraph(term).setFont(normalFont).setFontSize(9)
-                                .setFontColor(ColorConstants.DARK_GRAY).setMarginBottom(2));
+                        document.add(new Paragraph(term).setFont(normalFont).setFontSize(9).setFontColor(ColorConstants.DARK_GRAY).setMarginBottom(2));
                 }
 
                 document.add(new Paragraph("\n"));

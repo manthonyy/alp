@@ -49,9 +49,7 @@ public class User {
             score += 20;
         }
     }
-
     score = (int)(score * userTier.multiplier);
-
         return score;
     }
 

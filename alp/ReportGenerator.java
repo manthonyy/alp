@@ -24,7 +24,6 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 
 public class ReportGenerator {
-
     private TransactionManager transactionManager;
     private ArrayList<User> userList;
 
@@ -212,7 +211,6 @@ public class ReportGenerator {
 
             ArrayList<Transaction> transactions = transactionManager.transactionList;
 
-            // Aggregate
             Map<String, Double>  wasteByType  = new HashMap<>();
             Map<String, Integer> countByType  = new HashMap<>();
             Map<String, Integer> pointsByType = new HashMap<>();
@@ -261,7 +259,6 @@ public class ReportGenerator {
             document.close();
 
             System.out.println("Waste Report exported: " + filename);
-
         } catch (IOException e) {
             System.out.println("Error exporting Waste Report PDF: " + e.getMessage());
         }

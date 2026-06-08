@@ -74,21 +74,15 @@ public class Menu {
         String password = x.nextLine();
 
         if(accountData.containsKey(username)) {
-
             if(accountData.get(username).equals(password)) {
-
                 for(User u : userList) {
-
                     if(u.getUsername().equals(username)) {
-
                         currentUser = u;
                     }
                 }
 
                 System.out.println("Login Success!");
-
-                if(currentUser.getRole() ==
-                        UserRole.ADMIN) {
+                if(currentUser.getRole() ==  UserRole.ADMIN) {
                     System.out.println("You Are Logged in as Admin");
                     adminMenu();
                 }
@@ -98,25 +92,20 @@ public class Menu {
                 }
             }
             else {
-
                 System.out.println("Wrong Password!");
             }
         }
         else {
-
             System.out.println("Username Not Found!");
         }
     }
 
     public void register() {
-
         System.out.println("===== REGISTER =====");
-
         System.out.print("Username : ");
         String username = x.nextLine();
 
         if(accountData.containsKey(username)) {
-
             System.out.println("Username Already Exists!");
             return;
         }
@@ -124,28 +113,16 @@ public class Menu {
         System.out.print("Password : ");
         String password = x.nextLine();
 
-        String userId =
-                "USR00" + (userList.size());
-
-        User newUser =
-                new User(
-                        userId,
-                        username,
-                        password,
-                        UserRole.USER
-                );
+        String userId = "USR00" + (userList.size());
+        User newUser = new User(userId, username, password, UserRole.USER);
 
         userList.add(newUser);
-
         accountData.put(username, password);
-
         System.out.println("Register Success!");
     }
 
     public void userMenu() {
-
         while(true) {
-
             System.out.println("===== USER MENU =====");
             System.out.println("1. Deposit Waste");
             System.out.println("2. View Points");
@@ -155,12 +132,10 @@ public class Menu {
             System.out.println("6. Show Sustainability Rank");
             System.out.println("7. Logout");
             System.out.print("Choose Menu: ");
-
             int menu = x.nextInt();
             x.nextLine();
 
             switch(menu) {
-
             case 1:
                 depositWaste();
                 break;
@@ -200,11 +175,9 @@ public class Menu {
         System.out.println("4. Organic Waste");
         System.out.println("5. E-Waste");
         System.out.print("Choose Waste Type: ");
-
         int choice = x.nextInt();
 
         System.out.print("Input Weight (kg) : ");
-
         double weight = x.nextDouble();
         x.nextLine();
 
@@ -240,7 +213,7 @@ public class Menu {
         currentUser.addPoints(points);
         int earned = (int)(points * currentUser.getUserTier().multiplier);
 
-        Transaction t =new Transaction("TRX" +(currentUser.transactionHistory.size() + 1),currentUser,waste,weight,points);
+        Transaction t =new Transaction("TRX" +(currentUser.transactionHistory.size() + 1),currentUser, waste, weight, points);
             transactionManager.addTransaction(t);
             currentUser.transactionHistory.add(t);
             transactionManager.saveAllTransactionsToFile();
@@ -258,90 +231,83 @@ public class Menu {
             }
 
     public void adminMenu(){
-    while(true){
-        System.out.println("===== ADMIN MENU =====");
-        System.out.println("1. View All Users");
-        System.out.println("2. Process Waste");
-        System.out.println("3. Generate Report");
-        System.out.println("4. Display Facility Info & Upgrade");
-        System.out.println("5. View All Transactions");
-        System.out.println("6. Total Waste");
-        System.out.println("7. Search Transactions");
-        System.out.println("8. Show Leaderboard");
-        System.out.println("9. Logout");
-        System.out.print("Choose Menu: ");
+        while(true){
+            System.out.println("===== ADMIN MENU =====");
+            System.out.println("1. View All Users");
+            System.out.println("2. Process Waste");
+            System.out.println("3. Generate Report");
+            System.out.println("4. Display Facility Info & Upgrade");
+            System.out.println("5. View All Transactions");
+            System.out.println("6. Total Waste");
+            System.out.println("7. Search Transactions");
+            System.out.println("8. Show Leaderboard");
+            System.out.println("9. Logout");
+            System.out.print("Choose Menu: ");
 
-        int menu = x.nextInt();
-        x.nextLine();
+            int menu = x.nextInt();
+            x.nextLine();
 
-        switch(menu){
-
-            case 1:
-                viewAllUsers();
-                break;
-
-            case 2:
-                queueManager.displayQueue(); 
-                System.out.print("Do you want to process the queue now? (y/n): ");
-                String confirm = x.next();
-                x.nextLine(); 
-                
-                if (confirm.equalsIgnoreCase("y")) {
-                    queueManager.processQueue();
-                } else {
-                    System.out.println("Process cancelled.");
-                }
-                break;
-
-            case 3:
-                generateReportMenu();
-                break;
-
-            case 4:
-                while (true) {
-                queueManager.displayCenters();
-                System.out.print("Do you want to upgrade a center's capacity? (y/n): "); 
-                String upgradeConfirm = x.next();
-                x.nextLine();
-
-                if (!upgradeConfirm.equalsIgnoreCase("y")) {
+            switch(menu){
+                case 1:
+                    viewAllUsers();
                     break;
+                case 2:
+                    queueManager.displayQueue(); 
+                    System.out.print("Do you want to process the queue now? (y/n): ");
+                    String confirm = x.next();
+                    x.nextLine(); 
+                    
+                    if (confirm.equalsIgnoreCase("y")) {
+                        queueManager.processQueue();
+                    } else {
+                        System.out.println("Process cancelled.");
+                    }
+                    break;
+                case 3:
+                    generateReportMenu();
+                    break;
+                case 4:
+                    while (true) {
+                    queueManager.displayCenters();
+                    System.out.print("Do you want to upgrade a center's capacity? (y/n): "); 
+                    String upgradeConfirm = x.next();
+                    x.nextLine();
+
+                    if (!upgradeConfirm.equalsIgnoreCase("y")) {
+                        break;
+                    }
+
+                    System.out.print("Choose Center to Upgrade : ");
+                    int choice = x.nextInt();
+                    x.nextLine();
+                    System.out.print("Input Additional Capacity (Kg): ");
+                    double amount = x.nextDouble();
+                    x.nextLine();
+                    
+                    queueManager.upgradeCenter(choice - 1, amount);
+                    break;
+                    }
+                    break;
+                case 5:
+                    transactionManager.showAllTransactions();
+                    break;
+                case 6:
+                    transactionManager.systemMonitoring();
+                    break;
+                case 7:
+                    searchTransactionMenu();
+                    break;
+
+                case 8:
+                    showLeaderboard();
+                    break; 
+                case 9:
+                    return;
+                default:
+                    System.out.println("Invalid Menu");
                 }
-
-                System.out.print("Choose Center to Upgrade : ");
-                int choice = x.nextInt();
-                x.nextLine();
-                System.out.print("Input Additional Capacity (Kg): ");
-                double amount = x.nextDouble();
-                x.nextLine();
-                
-                queueManager.upgradeCenter(choice - 1, amount);
-                break;
-                }
-                break;
-            case 5:
-                transactionManager.showAllTransactions();
-                break;
-
-            case 6:
-                transactionManager.systemMonitoring();
-                break;
-
-            case 7:
-                searchTransactionMenu();
-                break;
-
-            case 8:
-                showLeaderboard();
-                break; 
-
-            case 9:
-                return;
-            default:
-                System.out.println("Invalid Menu");
             }
         }
-    }
 
     public void searchTransactionMenu() {
         System.out.print("Username (press enter to skip): ");
@@ -377,7 +343,7 @@ public class Menu {
     public void showSustainabilityScore(User user) {
     int score = user.getSustainabilityScore();
     System.out.println("===== SUSTAINABILITY SCORE =====");
-    System.out.println("User      : " + user.getUsername());
+    System.out.println("Username  : " + user.getUsername());
     System.out.println("Score     : " + score);
     System.out.println("Rank      : " + user.getSustainabilityRank());
     System.out.println("--------------------------------");
@@ -387,11 +353,14 @@ public class Menu {
     }
 
     public void showLeaderboard() {
-    System.out.println("Sort by: 1.Points");
-    System.out.println("         2.Total Waste (Kg) Deposited");
-    System.out.println("         3.Number of Transactions");
-    System.out.println("         4.Sustainability Score");
-    int rank = x.nextInt(); x.nextLine();
+    System.out.println("Sort by: ");
+    System.out.println("1. Points");
+    System.out.println("2. Total Waste (Kg) Deposited");
+    System.out.println("3. Number of Transactions");
+    System.out.println("4. Sustainability Score");
+    System.out.print("Choose sorting criteria: ");
+    int rank = x.nextInt(); 
+    x.nextLine();
 
     ArrayList<User> ranked = new ArrayList<>(userList);
 
@@ -414,8 +383,8 @@ public class Menu {
     for (int i = 0; i < ranked.size(); i++) {
         User u = ranked.get(i);
         System.out.printf("%2d. %-15s | %5d pts | %.1f kg | %d deposits | Score: %d (%s)%n",i + 1, u.getUsername(), u.getTotalPoints(),u.getTotalKgDeposited(), u.transactionHistory.size(),u.getSustainabilityScore(), u.getSustainabilityRank());
+        }
     }
-}
 
     public void generateReportMenu() {
 
@@ -500,17 +469,13 @@ public class Menu {
     }
 
         public void viewAllUsers(){
-
         System.out.println("===== USER LIST =====");
-
         if(userList.isEmpty()){
-
             System.out.println("No User Data");
             return;
         }
 
         for(User u : userList){
-
             System.out.println("User ID : " + u.getUserId());
             System.out.println("Username : " + u.getUsername());
             System.out.println("Role : " + u.getRole());
