@@ -54,8 +54,7 @@ public class Menu {
 
                 case 3:
                     System.out.println("Thank you!");
-                    System.exit(0);
-                    break;
+                    return;
 
                 default:
                     System.out.println("Invalid Menu");
